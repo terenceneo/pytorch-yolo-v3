@@ -13,6 +13,7 @@ import random
 import pickle as pkl
 import argparse
 
+video_file = "../../data/recording/WIN_20220317_10_41_16_Pro.mp4"
 
 def get_test_input(input_dim, CUDA):
     img = cv2.imread("dog-cycle-car.png")
@@ -65,16 +66,16 @@ def arg_parse():
    
     parser.add_argument("--video", dest = 'video', help = 
                         "Video to run detection upon",
-                        default = "video.avi", type = str)
+                        default = video_file, type = str)
     parser.add_argument("--dataset", dest = "dataset", help = "Dataset on which the network has been trained", default = "pascal")
-    parser.add_argument("--confidence", dest = "confidence", help = "Object Confidence to filter predictions", default = 0.5)
+    parser.add_argument("--confidence", dest = "confidence", help = "Object Confidence to filter predictions", default = 0.6) # original was 0.5
     parser.add_argument("--nms_thresh", dest = "nms_thresh", help = "NMS Threshhold", default = 0.4)
     parser.add_argument("--cfg", dest = 'cfgfile', help = 
                         "Config file",
-                        default = "cfg/yolov3.cfg", type = str)
+                        default = "cfg/yolo.cfg", type = str)
     parser.add_argument("--weights", dest = 'weightsfile', help = 
                         "weightsfile",
-                        default = "yolov3.weights", type = str)
+                        default = "weights/yolo.weights", type = str)
     parser.add_argument("--reso", dest = 'reso', help = 
                         "Input resolution of the network. Increase to increase accuracy. Decrease to increase speed",
                         default = "416", type = str)
@@ -95,7 +96,7 @@ if __name__ == '__main__':
     
     bbox_attrs = 5 + num_classes
     
-    print("Loading network.....")
+    print("Loading network.....", args.cfgfile)
     model = Darknet(args.cfgfile)
     model.load_weights(args.weightsfile)
     print("Network successfully loaded")
